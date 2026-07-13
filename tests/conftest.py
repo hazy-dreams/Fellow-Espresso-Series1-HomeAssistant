@@ -69,6 +69,7 @@ class _Description:
     translation_key: str | None = None
     entity_category: Any = None
     device_class: Any = None
+    state_class: Any = None
     native_unit_of_measurement: str | None = None
     icon: str | None = None
 
@@ -94,6 +95,8 @@ _module(
     Platform=SimpleNamespace(BINARY_SENSOR="binary_sensor", SENSOR="sensor"),
     PERCENTAGE="%",
     UnitOfLength=SimpleNamespace(METERS="m"),
+    UnitOfMass=SimpleNamespace(GRAMS="g"),
+    UnitOfTime=SimpleNamespace(SECONDS="s"),
 )
 _module("homeassistant.core", HomeAssistant=object, callback=lambda fn: fn)
 _module("homeassistant.data_entry_flow", FlowResult=dict)
@@ -143,6 +146,8 @@ _module(
     "homeassistant.components.sensor",
     SensorEntity=_Entity,
     SensorEntityDescription=_Description,
+    SensorDeviceClass=SimpleNamespace(WEIGHT="weight", DURATION="duration"),
+    SensorStateClass=SimpleNamespace(MEASUREMENT="measurement"),
 )
 
 vol = _module("voluptuous")

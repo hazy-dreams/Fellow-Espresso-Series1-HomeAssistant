@@ -28,7 +28,7 @@ The integration is intentionally read-only. It checks machine state every five m
 - **Machine status** — cloud connectivity and firmware-update status.
 - **Firmware details** — installed firmware version and settings revision.
 - **Espresso profiles** — active profile, profile count, and structured recipe attributes.
-- **Dashboard-friendly recipes** — dose, ratio, target yield, temperature, pre-infusion, infusion stages, and ramp-down data.
+- **Recipe data** — dose, ratio, planned target yield and duration, temperature, pre-infusion, infusion stages, and ramp-down data.
 - **Multiple machines** — select a Series 1 during setup and repeat setup for additional machines.
 - **Privacy-conscious auth** — the Fellow password is exchanged during setup and never stored.
 - **Safe by default** — no remote brew, steam, hot-water, firmware, profile, or settings writes.
@@ -44,6 +44,8 @@ Entity IDs depend on the machine name in Home Assistant. The examples below assu
 | `binary_sensor.espresso_series_1_firmware_update_required` | Update | Whether Fellow reports that firmware must be upgraded |
 | `sensor.espresso_series_1_firmware_version` | Diagnostic | Installed firmware version |
 | `sensor.espresso_series_1_active_profile` | Sensor | Title of the currently active espresso profile |
+| `sensor.espresso_series_1_target_yield` | Weight | Planned beverage yield derived from active-profile dose × ratio |
+| `sensor.espresso_series_1_planned_duration` | Duration | Planned active-profile duration from enabled pre-infusion, infusion, and ramp-down phases |
 | `sensor.espresso_series_1_profile_count` | Sensor | Number of profiles returned by Fellow |
 | `sensor.espresso_series_1_elevation` | Diagnostic | Machine elevation in meters |
 | `sensor.espresso_series_1_settings_version` | Diagnostic | Fellow's device-settings revision |
@@ -56,6 +58,7 @@ The active-profile sensor exposes only structured recipe values:
 dose: 18.0
 ratio: 2.0
 target_yield: 36.0
+planned_duration: 35.0
 temperature: 93.0
 grind_size: 5.0
 adaptive: true
@@ -183,7 +186,6 @@ Issues and pull requests are welcome. Contributions should:
 
 ## Acknowledgements
 
-- [FellowAiden-HomeAssistant](https://github.com/kristofferR/FellowAiden-HomeAssistant) for demonstrating what a polished Fellow integration can look like in Home Assistant. This project is a separate clean implementation for the Series 1 API and does not reuse its Aiden client code.
 - The Home Assistant and HACS communities for their integration tooling and documentation.
 
 Fellow brand assets are sourced from the official [Home Assistant brands repository](https://github.com/home-assistant/brands/tree/master/custom_integrations/fellow). Fellow and its logos are trademarks of their respective owner and are not licensed under this project's GPL-3.0 software license.

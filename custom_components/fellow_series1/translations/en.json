@@ -44,6 +44,8 @@
     },
     "sensor": {
       "active_profile": {"name": "Active profile"},
+      "target_yield": {"name": "Target yield"},
+      "planned_duration": {"name": "Planned duration"},
       "elevation": {"name": "Elevation"},
       "firmware_version": {"name": "Firmware version"},
       "profile_count": {"name": "Profile count"},

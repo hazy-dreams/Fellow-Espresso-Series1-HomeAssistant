@@ -84,12 +84,12 @@ roasterName, notes, imageUrl, blurHash
 
 Each `infusion` item observed has `duration` and `pressure`.
 
-Do not expose profile IDs, notes, roaster names, image URLs, hashes, or timestamps as diagnostics. The active profile entity may expose structured recipe fields: dose, ratio, derived target yield, temperature, grind size, adaptive, pre-infusion configuration, infusion stages, and ramp-down configuration.
+Do not expose profile IDs, notes, roaster names, image URLs, hashes, or timestamps as diagnostics. The active profile entity may expose structured recipe fields: dose, ratio, derived target yield, derived planned duration, temperature, grind size, adaptive, pre-infusion configuration, infusion stages, and ramp-down configuration.
 
 ## Unsupported or unverified
 
 - `/v2/solo/devices/{id}/schedules` returned HTTP 403.
 - No shot history, total shot counter, water usage, live pressure/flow, heater state, ready state, or shot timestamps were observed.
 - `missingWater` and `awsStatus` were null while idle; do not create entities until behavior is proven.
-- App code contains write/control routes, but v0.1.0 must not call them.
+- App code contains write/control routes, but this integration must not call them.
 - Do not expose remote brew.

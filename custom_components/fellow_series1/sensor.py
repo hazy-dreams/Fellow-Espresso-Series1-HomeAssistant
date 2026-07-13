@@ -6,9 +6,14 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from typing import Any
 
-from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorEntityDescription,
+    SensorStateClass,
+)
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import UnitOfLength
+from homeassistant.const import UnitOfLength, UnitOfMass, UnitOfTime
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -37,6 +42,30 @@ SENSOR_DESCRIPTIONS = (
         translation_key="active_profile",
         value_fn=lambda data: (
             data.active_profile.title if data.active_profile is not None else None
+        ),
+    ),
+    FellowSensorDescription(
+        key="target_yield",
+        translation_key="target_yield",
+        native_unit_of_measurement=UnitOfMass.GRAMS,
+        device_class=SensorDeviceClass.WEIGHT,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: (
+            data.active_profile.target_yield
+            if data.active_profile is not None
+            else None
+        ),
+    ),
+    FellowSensorDescription(
+        key="planned_duration",
+        translation_key="planned_duration",
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        device_class=SensorDeviceClass.DURATION,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: (
+            data.active_profile.planned_duration
+            if data.active_profile is not None
+            else None
         ),
     ),
     FellowSensorDescription(

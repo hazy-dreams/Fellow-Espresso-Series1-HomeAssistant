@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import re
+import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,7 +37,6 @@ for path in (INTEGRATION / "brand").glob("*.png"):
 manifest = json.loads((INTEGRATION / "manifest.json").read_text(encoding="utf-8"))
 expected = {
     "domain": "fellow_series1",
-    "version": "0.1.0",
     "config_flow": True,
     "documentation": "https://github.com/hazy-dreams/Fellow-Series1-HomeAssistant#readme",
     "iot_class": "cloud_polling",
@@ -44,6 +45,17 @@ expected = {
 for key, value in expected.items():
     if manifest.get(key) != value:
         raise SystemExit(f"manifest.json has invalid {key!r}")
+
+manifest_version = manifest.get("version")
+if (
+    not isinstance(manifest_version, str)
+    or re.fullmatch(r"(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)", manifest_version)
+    is None
+):
+    raise SystemExit("manifest.json has invalid 'version'")
+project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+if project.get("project", {}).get("version") != manifest_version:
+    raise SystemExit("pyproject.toml and manifest.json versions must match")
 
 hacs = json.loads((ROOT / "hacs.json").read_text(encoding="utf-8"))
 if not isinstance(hacs.get("name"), str) or not hacs["name"]:

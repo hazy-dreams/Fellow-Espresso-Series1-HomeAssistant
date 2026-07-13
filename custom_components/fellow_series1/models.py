@@ -142,17 +142,44 @@ class Profile:
         )
 
     @property
-    def recipe_attributes(self) -> dict[str, Any]:
-        """Return the explicitly permitted structured recipe attributes."""
-        target_yield = (
+    def target_yield(self) -> float | None:
+        """Return the planned beverage yield derived from dose and ratio."""
+        return (
             round(self.dose * self.ratio, 3)
             if self.dose is not None and self.ratio is not None
             else None
         )
+
+    @property
+    def planned_duration(self) -> float | None:
+        """Return the planned duration of enabled recipe phases in seconds."""
+        durations: list[float] = []
+        if self.pre_infusion_enabled is None or self.ramp_down_enabled is None:
+            return None
+        if not self.infusion:
+            return None
+        if self.pre_infusion_enabled:
+            if self.pre_infusion_duration is None:
+                return None
+            durations.append(self.pre_infusion_duration)
+        for stage in self.infusion:
+            if stage.duration is None:
+                return None
+            durations.append(stage.duration)
+        if self.ramp_down_enabled:
+            if self.ramp_down_duration is None:
+                return None
+            durations.append(self.ramp_down_duration)
+        return round(sum(durations), 3) if durations else None
+
+    @property
+    def recipe_attributes(self) -> dict[str, Any]:
+        """Return the explicitly permitted structured recipe attributes."""
         return {
             "dose": self.dose,
             "ratio": self.ratio,
-            "target_yield": target_yield,
+            "target_yield": self.target_yield,
+            "planned_duration": self.planned_duration,
             "temperature": self.temperature,
             "grind_size": self.grind_size,
             "adaptive": self.adaptive,
