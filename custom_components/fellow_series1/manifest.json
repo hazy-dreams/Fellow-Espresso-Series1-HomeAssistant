@@ -7,6 +7,7 @@
   "documentation": "https://github.com/hazy-dreams/Fellow-Series1-HomeAssistant#readme",
   "integration_type": "device",
   "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/hazy-dreams/Fellow-Series1-HomeAssistant/issues",
   "requirements": [],
   "version": "0.1.0"
 }

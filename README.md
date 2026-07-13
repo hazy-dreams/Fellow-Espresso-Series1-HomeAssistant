@@ -185,6 +185,8 @@ Issues and pull requests are welcome. Contributions should:
 - [FellowAiden-HomeAssistant](https://github.com/kristofferR/FellowAiden-HomeAssistant) for demonstrating what a polished Fellow integration can look like in Home Assistant. This project is a separate clean implementation for the Series 1 API and does not reuse its Aiden client code.
 - The Home Assistant and HACS communities for their integration tooling and documentation.
 
+Fellow brand assets are sourced from the official [Home Assistant brands repository](https://github.com/home-assistant/brands/tree/master/custom_integrations/fellow). Fellow and its logos are trademarks of their respective owner and are not licensed under this project's GPL-3.0 software license.
+
 ## License
 
 This project is licensed under the [GNU General Public License v3.0](LICENSE). Distributed modifications must remain available under the same license.

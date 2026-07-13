@@ -15,6 +15,10 @@ required_files = (
     INTEGRATION / "manifest.json",
     INTEGRATION / "strings.json",
     INTEGRATION / "translations" / "en.json",
+    INTEGRATION / "brand" / "icon.png",
+    INTEGRATION / "brand" / "icon@2x.png",
+    INTEGRATION / "brand" / "logo.png",
+    INTEGRATION / "brand" / "logo@2x.png",
 )
 for path in required_files:
     if not path.is_file():
@@ -23,6 +27,10 @@ for path in required_files:
 for path in ROOT.rglob("*.json"):
     with path.open(encoding="utf-8") as file:
         json.load(file)
+
+for path in (INTEGRATION / "brand").glob("*.png"):
+    if not path.read_bytes().startswith(b"\x89PNG\r\n\x1a\n"):
+        raise SystemExit(f"Invalid PNG brand asset: {path.relative_to(ROOT)}")
 
 manifest = json.loads((INTEGRATION / "manifest.json").read_text(encoding="utf-8"))
 expected = {
