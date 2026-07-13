@@ -62,18 +62,15 @@ class FellowApiClient:
     async def async_refresh_access_token(self) -> TokenSet:
         if self._refresh_token is None or self._access_token is None:
             raise ApiAuthenticationError("Authentication required")
-        try:
-            payload = await self._request_json(
-                "POST",
-                "/v2/auth/refresh-token",
-                authenticated=False,
-                authorization_token=self._access_token,
-                json={"refreshToken": self._refresh_token},
-                expected_statuses={200, 201},
-            )
-            tokens = self._parse_tokens(payload, fallback_refresh=self._refresh_token)
-        except FellowApiError as err:
-            raise ApiAuthenticationError("Token refresh failed") from err
+        payload = await self._request_json(
+            "POST",
+            "/v2/auth/refresh-token",
+            authenticated=False,
+            authorization_token=self._access_token,
+            json={"refreshToken": self._refresh_token},
+            expected_statuses={200, 201},
+        )
+        tokens = self._parse_tokens(payload, fallback_refresh=self._refresh_token)
 
         self._apply_tokens(tokens)
         return tokens

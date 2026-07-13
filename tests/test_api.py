@@ -3,9 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import pytest
+from aiohttp import ClientError
 from custom_components.fellow_series1.api import (
     ApiAuthenticationError,
     FellowApiClient,
+    FellowApiError,
     TokenSet,
 )
 
@@ -35,7 +37,10 @@ class FakeSession:
 
     def request(self, method, url, **kwargs):
         self.calls.append((method, url, kwargs))
-        return self.responses.pop(0)
+        response = self.responses.pop(0)
+        if isinstance(response, BaseException):
+            raise response
+        return response
 
 
 @pytest.mark.asyncio
@@ -100,6 +105,87 @@ async def test_refresh_rotation_and_auth_failure():
     assert session.calls[0][2]["headers"]["Authorization"] == "Bearer FAKE-ACCESS-1"
     with pytest.raises(ApiAuthenticationError):
         await client.async_get_device("FAKE-SOLO-DEVICE-0001")
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "failure",
+    [TimeoutError("FAKE timeout"), ClientError("FAKE network failure")],
+)
+async def test_refresh_transport_failure_remains_transient(failure):
+    rotated = []
+    session = FakeSession([failure])
+    client = FellowApiClient(
+        session,
+        access_token="FAKE-ACCESS-1",
+        refresh_token="FAKE-REFRESH-1",
+        on_tokens=rotated.append,
+        api_origin="",
+    )
+
+    with pytest.raises(FellowApiError) as err:
+        await client.async_refresh_access_token()
+
+    assert not isinstance(err.value, ApiAuthenticationError)
+    assert rotated == []
+    assert session.calls[0][0:2] == ("POST", "/v2/auth/refresh-token")
+    assert session.calls[0][2]["headers"]["Authorization"] == "Bearer FAKE-ACCESS-1"
+
+
+@pytest.mark.asyncio
+async def test_refresh_server_error_remains_transient():
+    rotated = []
+    session = FakeSession([FakeResponse(500, {"message": "FAKE outage"})])
+    client = FellowApiClient(
+        session,
+        access_token="FAKE-ACCESS-1",
+        refresh_token="FAKE-REFRESH-1",
+        on_tokens=rotated.append,
+        api_origin="",
+    )
+
+    with pytest.raises(FellowApiError) as err:
+        await client.async_refresh_access_token()
+
+    assert not isinstance(err.value, ApiAuthenticationError)
+    assert rotated == []
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("status", [401, 403])
+async def test_refresh_rejected_credentials_are_authentication_failures(status):
+    rotated = []
+    session = FakeSession([FakeResponse(status, {})])
+    client = FellowApiClient(
+        session,
+        access_token="FAKE-ACCESS-1",
+        refresh_token="FAKE-REFRESH-1",
+        on_tokens=rotated.append,
+        api_origin="",
+    )
+
+    with pytest.raises(ApiAuthenticationError):
+        await client.async_refresh_access_token()
+
+    assert rotated == []
+
+
+@pytest.mark.asyncio
+async def test_refresh_invalid_success_payload_is_authentication_failure():
+    rotated = []
+    session = FakeSession([FakeResponse(200, {"accessToken": 1})])
+    client = FellowApiClient(
+        session,
+        access_token="FAKE-ACCESS-1",
+        refresh_token="FAKE-REFRESH-1",
+        on_tokens=rotated.append,
+        api_origin="",
+    )
+
+    with pytest.raises(ApiAuthenticationError):
+        await client.async_refresh_access_token()
+
+    assert rotated == []
 
 
 @pytest.mark.asyncio
