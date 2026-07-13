@@ -1,0 +1,31 @@
+[project]
+name = "fellow-series1-homeassistant"
+version = "0.1.0"
+description = "Unofficial Home Assistant integration for Fellow Espresso Series 1"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = ["aiohttp>=3.9.0"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.12.0",
+]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers"
+asyncio_mode = "auto"
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+src = ["custom_components", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]

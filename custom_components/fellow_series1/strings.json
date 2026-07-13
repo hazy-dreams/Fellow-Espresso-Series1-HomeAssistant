@@ -1,0 +1,53 @@
+{
+  "title": "Fellow Espresso Series 1",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to Fellow cloud",
+        "description": "Sign in to discover Fellow Espresso Series 1 machines. Your password is exchanged for tokens and is not stored.",
+        "data": {
+          "email": "Email",
+          "password": "Password"
+        }
+      },
+      "device": {
+        "title": "Choose a Series 1",
+        "description": "Choose the machine to add. Run setup again to add another machine.",
+        "data": {
+          "device_id": "Machine"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reconnect to Fellow cloud",
+        "description": "Enter the password for the existing account. The account email cannot be changed during reauthentication.",
+        "data": {
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to connect to Fellow cloud",
+      "invalid_auth": "Invalid authentication",
+      "no_devices": "No Fellow Espresso Series 1 machines were found"
+    },
+    "abort": {
+      "already_configured": "This machine is already configured",
+      "no_devices": "No Fellow Espresso Series 1 machines were found",
+      "reauth_successful": "Reauthentication was successful",
+      "unknown": "Setup could not be completed"
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "connected": {"name": "Connected"},
+      "firmware_update_required": {"name": "Firmware update required"}
+    },
+    "sensor": {
+      "active_profile": {"name": "Active profile"},
+      "elevation": {"name": "Elevation"},
+      "firmware_version": {"name": "Firmware version"},
+      "profile_count": {"name": "Profile count"},
+      "settings_version": {"name": "Settings version"}
+    }
+  }
+}

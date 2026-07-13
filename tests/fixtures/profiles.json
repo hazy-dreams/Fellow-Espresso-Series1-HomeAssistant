@@ -1,0 +1,26 @@
+{
+  "profiles": [
+    {
+      "id": "FAKE-PROFILE-0001",
+      "title": "Test Profile",
+      "dose": 18.0,
+      "ratio": 2.0,
+      "temperature": 93.0,
+      "grindSize": 4.5,
+      "adaptive": true,
+      "preInfusionEnabled": true,
+      "preInfusionDuration": 5,
+      "preInfusionFillFlowRate": 3.0,
+      "preInfusionHoldPressure": 2.0,
+      "infusion": [{"duration": 25, "pressure": 9.0}],
+      "rampDownEnabled": true,
+      "rampDownDuration": 4,
+      "rampDownEndPressure": 6.0,
+      "notes": "PRIVATE TEST NOTE MUST NOT ESCAPE",
+      "roasterName": "PRIVATE TEST ROASTER",
+      "imageUrl": "https://invalid.example/PRIVATE-IMAGE",
+      "blurHash": "PRIVATE-FAKE-HASH",
+      "updatedAt": "2000-01-01T00:00:00Z"
+    }
+  ]
+}

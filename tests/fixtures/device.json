@@ -1,0 +1,13 @@
+{
+  "id": "FAKE-SOLO-DEVICE-0001",
+  "displayName": "Test Espresso Machine",
+  "deviceType": "Solo",
+  "isConnected": true,
+  "firmwareVersion": "0.0.0-test",
+  "firmwareUpgradeRequired": false,
+  "activeProfileId": "FAKE-PROFILE-0001",
+  "elevation": 321,
+  "settingsVersion": 7,
+  "serialNumber": "FAKE-SERIAL-0001",
+  "macAddress": "00:00:00:00:00:00"
+}

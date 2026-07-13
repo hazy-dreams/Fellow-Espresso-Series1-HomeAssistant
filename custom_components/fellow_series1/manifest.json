@@ -1,0 +1,12 @@
+{
+  "domain": "fellow_series1",
+  "name": "Fellow Espresso Series 1",
+  "codeowners": ["@hazy-dreams"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/hazy-dreams/Fellow-Series1-HomeAssistant#readme",
+  "integration_type": "device",
+  "iot_class": "cloud_polling",
+  "requirements": [],
+  "version": "0.1.0"
+}
