@@ -1,6 +1,6 @@
 # Fellow Series 1 for Home Assistant — agent instructions
 
-This repository is intended for public release under the MIT license.
+This repository is intended for public release under the GNU GPL v3.0 license.
 
 ## Scope
 
@@ -13,7 +13,7 @@ Version 0.1.0 is cloud-polling and read-only. It supports Fellow Espresso Series
 - Never read files outside this repository, especially `~/.hermes/secrets`.
 - Never use or invent real account, device, profile, serial, MAC, or token values.
 - Fixtures must use obviously fake identifiers and neutral profile names.
-- Never persist the Fellow password. Exchange it during config flow, then store only email and refresh token.
+- Never persist the Fellow password. Exchange it during config flow, then store only the email, selected device identifier, and token pair required by Fellow's refresh contract.
 - Redact tokens, serial numbers, device IDs, emails, profile notes, image URLs, and user-authored text from diagnostics and logs.
 - No remote brew, schedules, profile writes, firmware writes, or device-setting writes in v0.1.0.
 - Do not copy implementation code from FellowAiden-HomeAssistant. This is a clean implementation based on the protocol facts in `PROTOCOL.md`.
@@ -31,5 +31,5 @@ Version 0.1.0 is cloud-polling and read-only. It supports Fellow Espresso Series
 - Diagnostics are aggressively redacted.
 - Config flow, API client, models/helpers, coordinator behavior, entities, and diagnostics have tests with sanitized fixtures.
 - README documents cloud dependence, supported features, unsupported telemetry/control, installation, security/privacy, and reverse-engineered/unofficial status.
-- Include MIT LICENSE, HACS metadata, translations, GitHub CI, Ruff configuration, pytest configuration, and a manifest with version `0.1.0`.
+- Include GPL-3.0 LICENSE, HACS metadata, translations, GitHub CI, Ruff configuration, pytest configuration, and a manifest with version `0.1.0`.
 - `pytest`, Ruff, syntax compilation, JSON parsing, and manifest/HACS structure checks pass.

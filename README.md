@@ -1,95 +1,190 @@
+<div align="center">
+
 # Fellow Espresso Series 1 for Home Assistant
 
-An unofficial, read-only Home Assistant custom integration for the **Fellow
-Espresso Series 1** (`deviceType: Solo`). It uses Fellow's cloud API and can
-coexist with integrations whose domain is `fellow`; this integration's domain
-is `fellow_series1`.
+**A focused, read-only Home Assistant integration for the Fellow Espresso Series 1.**
 
-Home Assistant 2024.11.0 or newer is required.
+[![GitHub Release](https://img.shields.io/github/v/release/hazy-dreams/Fellow-Series1-HomeAssistant)](https://github.com/hazy-dreams/Fellow-Series1-HomeAssistant/releases)
+[![CI](https://img.shields.io/github/actions/workflow/status/hazy-dreams/Fellow-Series1-HomeAssistant/ci.yml?branch=main&label=validation)](https://github.com/hazy-dreams/Fellow-Series1-HomeAssistant/actions/workflows/ci.yml)
+[![HACS](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://www.hacs.xyz/docs/faq/custom_repositories/)
+[![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2024.11%2B-18BCF2.svg)](https://www.home-assistant.io/)
+[![License](https://img.shields.io/github/license/hazy-dreams/Fellow-Series1-HomeAssistant)](LICENSE)
 
-This project is reverse-engineered from observed app behavior. It is not
-documented, supported, or endorsed by Fellow. Cloud API changes can break it
-without notice.
+[Installation](#installation) · [Entities](#entities) · [Privacy](#security-and-privacy) · [Limitations](#currently-unsupported)
 
-## Features
+</div>
 
-Version 0.1.0 polls the Fellow cloud once per minute and provides:
+> [!IMPORTANT]
+> This is an unofficial integration based on observed Fellow app and cloud API behavior. It is not documented, supported, or endorsed by Fellow. Cloud API changes may break it without notice.
 
-- connected state;
-- firmware-update-required state;
-- firmware version;
-- active profile and structured recipe attributes;
-- profile count;
-- elevation; and
-- settings version.
+## What it does
 
-The active profile's attributes are limited to dose, ratio, calculated target
-yield, temperature, grind size, adaptive mode, pre-infusion settings, infusion
-stages, and ramp-down settings.
+Fellow Espresso Series 1 uses Fellow's newer cloud API and is not compatible with integrations built specifically for the Fellow Aiden. This project uses its own Home Assistant domain, `fellow_series1`, and can coexist with the Aiden integration.
 
-## Explicitly unsupported
+Version `0.1.0` is intentionally read-only. It polls Fellow once per minute and exposes machine connectivity, firmware, and the currently selected espresso profile—including the structured recipe behind that profile.
 
-Version 0.1.0 does **not** brew remotely or write schedules, profiles, firmware,
-or device settings. It does not provide shot history, shot count, water usage,
-live pressure or flow, heater/ready state, shot timestamps, or unverified idle
-fields. Those operations and measurements are absent rather than guessed.
+### Highlights
 
-## Cloud dependence
+- **Machine status** — cloud connectivity and firmware-update status.
+- **Firmware details** — installed firmware version and settings revision.
+- **Espresso profiles** — active profile, profile count, and structured recipe attributes.
+- **Dashboard-friendly recipes** — dose, ratio, target yield, temperature, pre-infusion, infusion stages, and ramp-down data.
+- **Multiple machines** — select a Series 1 during setup and repeat setup for additional machines.
+- **Privacy-conscious auth** — the Fellow password is exchanged during setup and never stored.
+- **Safe by default** — no remote brew, steam, hot-water, firmware, profile, or settings writes.
 
-This is a cloud-polling integration, not a local-network integration. Home
-Assistant needs internet access, Fellow's service must be available, and the
-machine must be associated with the Fellow account. Normal polling sends the
-stored refresh token and bearer access token to Fellow's API.
+## Entities
+
+Entity IDs depend on the machine name in Home Assistant. The examples below assume the default name `Espresso Series 1`.
+
+| Entity | Type | Description |
+| --- | --- | --- |
+| `binary_sensor.espresso_series_1_connected` | Connectivity | Whether Fellow cloud reports the machine connected |
+| `binary_sensor.espresso_series_1_firmware_update_required` | Update | Whether Fellow reports that firmware must be upgraded |
+| `sensor.espresso_series_1_firmware_version` | Diagnostic | Installed firmware version |
+| `sensor.espresso_series_1_active_profile` | Sensor | Title of the currently active espresso profile |
+| `sensor.espresso_series_1_profile_count` | Sensor | Number of profiles returned by Fellow |
+| `sensor.espresso_series_1_elevation` | Diagnostic | Machine elevation in meters |
+| `sensor.espresso_series_1_settings_version` | Diagnostic | Fellow's device-settings revision |
+
+### Active-profile attributes
+
+The active-profile sensor exposes only structured recipe values:
+
+```yaml
+dose: 18.0
+ratio: 2.0
+target_yield: 36.0
+temperature: 93.0
+grind_size: 5.0
+adaptive: true
+pre_infusion:
+  enabled: true
+  duration: 5.0
+  fill_flow_rate: 4.5
+  hold_pressure: 3.0
+infusion:
+  - duration: 25.0
+    pressure: 9.0
+ramp_down:
+  enabled: true
+  duration: 5.0
+  end_pressure: 5.0
+```
+
+Profile identifiers, notes, roaster names, image URLs, and other authored text are not exposed as attributes.
 
 ## Installation
 
-### HACS custom repository
+Home Assistant `2024.11.0` or newer is required.
 
-1. Add this repository to HACS as an **Integration** custom repository.
-2. Install **Fellow Espresso Series 1**.
-3. Restart Home Assistant.
+### HACS
+
+[![Open your Home Assistant instance and add this repository to HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=hazy-dreams&repository=Fellow-Series1-HomeAssistant&category=integration)
+
+Or add it manually:
+
+1. Open **HACS → Integrations**.
+2. Open the three-dot menu and choose **Custom repositories**.
+3. Add:
+   ```text
+   https://github.com/hazy-dreams/Fellow-Series1-HomeAssistant
+   ```
+4. Select **Integration** as the category.
+5. Install **Fellow Espresso Series 1**.
+6. Restart Home Assistant.
 
 ### Manual
 
-1. Copy `custom_components/fellow_series1` into the `custom_components`
-   directory in the Home Assistant configuration directory.
-2. Restart Home Assistant.
+1. Download the latest release.
+2. Copy `custom_components/fellow_series1` into your Home Assistant `custom_components` directory.
+3. Restart Home Assistant.
 
-Then open **Settings → Devices & services → Add integration**, search for
-**Fellow Espresso Series 1**, and enter the Fellow account email and password.
-If several Series 1 machines are found, choose one; run setup again for each
-additional machine.
+## Configuration
+
+1. Open **Settings → Devices & services**.
+2. Select **Add integration**.
+3. Search for **Fellow Espresso Series 1**.
+4. Enter your Fellow account email and password.
+5. If multiple Series 1 machines are found, choose one.
+6. Repeat setup for each additional machine.
+
+The machine must already be associated with the Fellow account in the official app.
 
 ## Security and privacy
 
-The password is used only for the login exchange and is never saved. The config
-entry stores the account email, access token, refresh token, and selected device
-identifier. Fellow's refresh endpoint requires both tokens; rotated token pairs
-atomically replace the stored credentials. Reauthentication uses the existing
-account email, so it cannot silently change account identity.
+- The account password is used only for login and is never stored.
+- Home Assistant stores the account email, selected device identifier, access token, and refresh token in its protected config-entry storage.
+- Fellow's refresh endpoint requires both tokens; rotated token pairs replace the stored credentials atomically.
+- API responses and private profile data are never written to logs.
+- Diagnostics redact email, tokens, device/profile identifiers, names, profile titles, notes, URLs, hashes, timestamps, and other authored text.
+- All included tests and fixtures use conspicuously fake identifiers and `.invalid` addresses.
 
-Diagnostics redact account email, tokens, device and profile identifiers,
-serial-like data, device names, profile titles, notes, roaster names, image
-URLs, hashes, timestamps, and other authored text. Recipe values and operational
-state remain visible. Avoid posting unreviewed Home Assistant logs or config
-storage even though this integration does not log private API payloads.
+This is a **cloud-polling** integration. Home Assistant needs internet access, Fellow's service must be available, and the machine must remain linked to the Fellow account.
+
+## Currently unsupported
+
+The current Series 1 cloud response does not expose the same operational counters and telemetry available from Aiden.
+
+Version `0.1.0` therefore does **not** provide:
+
+- remote brew, steam, or hot-water control;
+- profile, schedule, firmware, or machine-setting writes;
+- live pressure, flow, heater, or ready state;
+- shot history, shot count, or shot timestamps;
+- water usage or brew analytics;
+- schedules;
+- Wi-Fi or Bluetooth addresses.
+
+These features are omitted rather than guessed. If Fellow exposes safe, verifiable telemetry later, support can be added with sanitized fixtures and tests.
+
+## Troubleshooting
+
+### Authentication expired
+
+Home Assistant will open a reauthentication flow. Re-enter the Fellow password; it is exchanged for a new token pair and discarded again.
+
+### No Series 1 devices found
+
+Confirm that:
+
+- the machine appears in the official Fellow app;
+- the account credentials are correct;
+- the device is online; and
+- the device is an Espresso Series 1 (`deviceType: Solo`).
+
+### Entities are unavailable
+
+Check Fellow cloud availability and the machine's Wi-Fi connection. The integration retries transient cloud failures through Home Assistant's coordinator framework.
 
 ## Development
 
-The runtime has no third-party dependency beyond Home Assistant and its
-`aiohttp` stack. Run the checks used by CI:
-
 ```bash
-pytest
-ruff check .
-ruff format --check .
-python -m compileall -q custom_components tests
+uv sync --group dev
+uv run pytest
+uv run ruff check .
+uv run ruff format --check .
 python scripts/validate.py
 ```
 
-All tests and fixtures use conspicuously fake identifiers and `.invalid`
-addresses. See `PROTOCOL.md` for the sanitized protocol basis.
+The project also validates module imports against Home Assistant `2024.11.0` on Python `3.12`.
+
+See [`PROTOCOL.md`](PROTOCOL.md) for the sanitized API basis and [`AGENTS.md`](AGENTS.md) for project safety boundaries.
+
+## Contributing
+
+Issues and pull requests are welcome. Contributions should:
+
+- remain read-only unless a write operation has a documented safety case;
+- include tests with sanitized fixtures;
+- avoid real Fellow account, device, profile, serial, or token data; and
+- preserve diagnostic redaction and password-free storage.
+
+## Acknowledgements
+
+- [FellowAiden-HomeAssistant](https://github.com/kristofferR/FellowAiden-HomeAssistant) for demonstrating what a polished Fellow integration can look like in Home Assistant. This project is a separate clean implementation for the Series 1 API and does not reuse its Aiden client code.
+- The Home Assistant and HACS communities for their integration tooling and documentation.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+This project is licensed under the [GNU General Public License v3.0](LICENSE). Distributed modifications must remain available under the same license.
