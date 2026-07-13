@@ -51,6 +51,9 @@ class _Coordinator:
     async def async_config_entry_first_refresh(self) -> None:
         self.data = await self._async_update_data()
 
+    async def async_request_refresh(self) -> None:
+        self.data = await self._async_update_data()
+
 
 class _Entity:
     def __init__(self, coordinator: Any = None) -> None:

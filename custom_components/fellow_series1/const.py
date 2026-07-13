@@ -6,7 +6,8 @@ from homeassistant.const import Platform
 
 DOMAIN = "fellow_series1"
 PLATFORMS = (Platform.BINARY_SENSOR, Platform.SENSOR)
-DEFAULT_SCAN_INTERVAL = timedelta(seconds=60)
+DEFAULT_SCAN_INTERVAL = timedelta(minutes=5)
+PROFILE_SCAN_INTERVAL = timedelta(minutes=30)
 
 CONF_EMAIL = "email"
 CONF_ACCESS_TOKEN = "access_token"

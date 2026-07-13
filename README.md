@@ -19,9 +19,9 @@
 
 ## What it does
 
-Fellow Espresso Series 1 uses Fellow's newer cloud API and is not compatible with integrations built specifically for the Fellow Aiden. This project uses its own Home Assistant domain, `fellow_series1`, and can coexist with the Aiden integration.
+Fellow Espresso Series 1 uses Fellow's cloud API. This integration connects it to Home Assistant under the dedicated domain `fellow_series1`.
 
-Version `0.1.0` is intentionally read-only. It polls Fellow once per minute and exposes machine connectivity, firmware, and the currently selected espresso profile—including the structured recipe behind that profile.
+The integration is intentionally read-only. It checks machine state every five minutes and refreshes cached profiles every 30 minutes, or sooner when the active profile or settings revision changes. It exposes machine connectivity, firmware, and the currently selected espresso profile—including the structured recipe behind that profile.
 
 ### Highlights
 
@@ -32,6 +32,7 @@ Version `0.1.0` is intentionally read-only. It polls Fellow once per minute and 
 - **Multiple machines** — select a Series 1 during setup and repeat setup for additional machines.
 - **Privacy-conscious auth** — the Fellow password is exchanged during setup and never stored.
 - **Safe by default** — no remote brew, steam, hot-water, firmware, profile, or settings writes.
+- **Respectful polling** — device state every five minutes, profiles every 30 minutes, and full refreshes on demand.
 
 ## Entities
 
@@ -124,9 +125,9 @@ This is a **cloud-polling** integration. Home Assistant needs internet access, F
 
 ## Currently unsupported
 
-The current Series 1 cloud response does not expose the same operational counters and telemetry available from Aiden.
+The current Series 1 cloud response does not expose shot telemetry or historical usage counters.
 
-Version `0.1.0` therefore does **not** provide:
+The integration therefore does **not** provide:
 
 - remote brew, steam, or hot-water control;
 - profile, schedule, firmware, or machine-setting writes;
