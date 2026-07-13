@@ -161,7 +161,7 @@ wheels = [
 ]
 
 [[package]]
-name = "fellow-series1-homeassistant"
+name = "fellow-espresso-series1-homeassistant"
 version = "0.1.1"
 source = { virtual = "." }
 dependencies = [

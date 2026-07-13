@@ -4,11 +4,11 @@
 
 **A focused, read-only Home Assistant integration for the Fellow Espresso Series 1.**
 
-[![GitHub Release](https://img.shields.io/github/v/release/hazy-dreams/Fellow-Series1-HomeAssistant)](https://github.com/hazy-dreams/Fellow-Series1-HomeAssistant/releases)
-[![CI](https://img.shields.io/github/actions/workflow/status/hazy-dreams/Fellow-Series1-HomeAssistant/ci.yml?branch=main&label=validation)](https://github.com/hazy-dreams/Fellow-Series1-HomeAssistant/actions/workflows/ci.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant)](https://github.com/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant/releases)
+[![CI](https://img.shields.io/github/actions/workflow/status/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant/ci.yml?branch=main&label=validation)](https://github.com/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant/actions/workflows/ci.yml)
 [![HACS](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://www.hacs.xyz/docs/faq/custom_repositories/)
 [![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2024.11%2B-18BCF2.svg)](https://www.home-assistant.io/)
-[![License](https://img.shields.io/github/license/hazy-dreams/Fellow-Series1-HomeAssistant)](LICENSE)
+[![License](https://img.shields.io/github/license/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant)](LICENSE)
 
 [Installation](#installation) · [Entities](#entities) · [Privacy](#security-and-privacy) · [Limitations](#currently-unsupported)
 
@@ -88,7 +88,7 @@ Home Assistant `2024.11.0` or newer is required.
 
 ### HACS
 
-[![Open your Home Assistant instance and add this repository to HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=hazy-dreams&repository=Fellow-Series1-HomeAssistant&category=integration)
+[![Open your Home Assistant instance and add this repository to HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=hazy-dreams&repository=Fellow-Espresso-Series1-HomeAssistant&category=integration)
 
 Or add it manually:
 
@@ -96,7 +96,7 @@ Or add it manually:
 2. Open the three-dot menu and choose **Custom repositories**.
 3. Add:
    ```text
-   https://github.com/hazy-dreams/Fellow-Series1-HomeAssistant
+   https://github.com/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant
    ```
 4. Select **Integration** as the category.
 5. Install **Fellow Espresso Series 1**.
