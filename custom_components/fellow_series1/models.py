@@ -49,7 +49,7 @@ class Device:
         device_id = _optional_str(data.get("id"))
         if device_id is None:
             raise ValueError("Device response is missing an id")
-        display_name = _optional_str(data.get("displayName")) or "Fellow Series 1"
+        display_name = _optional_str(data.get("displayName")) or "Espresso Series 1"
         return cls(
             id=device_id,
             display_name=display_name,

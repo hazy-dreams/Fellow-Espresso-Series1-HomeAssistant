@@ -36,7 +36,7 @@ The integration is intentionally read-only. It checks machine state every five m
 
 ## Entities
 
-Entity IDs depend on the machine name in Home Assistant. The examples below assume the default name `Espresso Series 1`.
+Entity IDs depend on the machine name in Home Assistant. The examples below assume the machine is named `Espresso Series 1`.
 
 | Entity | Type | Description |
 | --- | --- | --- |
@@ -49,6 +49,8 @@ Entity IDs depend on the machine name in Home Assistant. The examples below assu
 | `sensor.espresso_series_1_profile_count` | Sensor | Number of profiles returned by Fellow |
 | `sensor.espresso_series_1_elevation` | Diagnostic | Machine elevation in meters |
 | `sensor.espresso_series_1_settings_version` | Diagnostic | Fellow's device-settings revision |
+
+Target yield is unavailable when the active profile does not include both dose and ratio. Planned duration is unavailable unless phase enablement and every included phase duration are present.
 
 ### Active-profile attributes
 
@@ -75,6 +77,8 @@ ramp_down:
   duration: 5.0
   end_pressure: 5.0
 ```
+
+Recipe values use Fellow's API units: dose and target yield are grams; planned and phase durations are seconds; temperature is degrees Celsius; pressure is bar; and pre-infusion flow rate is milliliters per second. Ratio and grind size are unitless. Nested attributes are plain numbers and do not carry Home Assistant unit metadata.
 
 Profile identifiers, notes, roaster names, image URLs, and other authored text are not exposed as attributes.
 
@@ -118,11 +122,11 @@ The machine must already be associated with the Fellow account in the official a
 ## Security and privacy
 
 - The account password is used only for login and is never stored.
-- Home Assistant stores the account email, selected device identifier, access token, and refresh token in its protected config-entry storage.
+- Home Assistant stores the account email, selected device identifier, access token, and refresh token in Home Assistant-managed config-entry storage.
 - Fellow's refresh endpoint requires both tokens; rotated token pairs replace the stored credentials atomically.
 - API responses and private profile data are never written to logs.
 - Diagnostics redact email, tokens, device/profile identifiers, names, profile titles, notes, URLs, hashes, timestamps, and other authored text.
-- All included tests and fixtures use conspicuously fake identifiers and `.invalid` addresses.
+- All included tests and fixtures use conspicuously fake identifiers and reserved test addresses such as `.invalid` and `.example`.
 
 This is a **cloud-polling** integration. Home Assistant needs internet access, Fellow's service must be available, and the machine must remain linked to the Fellow account.
 
@@ -154,12 +158,11 @@ Confirm that:
 
 - the machine appears in the official Fellow app;
 - the account credentials are correct;
-- the device is online; and
 - the device is an Espresso Series 1 (`deviceType: Solo`).
 
 ### Entities are unavailable
 
-Check Fellow cloud availability and the machine's Wi-Fi connection. The integration retries transient cloud failures through Home Assistant's coordinator framework.
+Check Fellow cloud availability and the machine's Wi-Fi connection. Home Assistant marks the entities unavailable when a coordinator update cannot complete.
 
 ## Development
 

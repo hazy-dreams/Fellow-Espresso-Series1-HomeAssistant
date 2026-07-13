@@ -12,6 +12,14 @@ def test_device_parses_only_supported_fields(device_payload):
     assert not hasattr(device, "serial_number")
 
 
+def test_device_uses_official_product_name_when_display_name_is_missing(
+    device_payload,
+):
+    device = Device.from_api({**device_payload, "displayName": ""})
+
+    assert device.display_name == "Espresso Series 1"
+
+
 def test_profile_recipe_attributes_are_structured_and_private_free(profiles_payload):
     profile = Profile.from_api(profiles_payload["profiles"][0])
 
