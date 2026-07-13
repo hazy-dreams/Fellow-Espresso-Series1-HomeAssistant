@@ -33,7 +33,7 @@ Content-Type: application/json
 {"refreshToken": "…"}
 ```
 
-The client must accept a rotated `refreshToken` when returned. On refresh failure, raise an authentication error so Home Assistant starts reauthentication; do not retain or retry a password.
+The client must accept a rotated `refreshToken` when returned. Treat a rejected refresh request (HTTP 401/403) or an unusable successful token response as an authentication failure so Home Assistant starts reauthentication. Preserve transport and non-authentication server failures as retryable update errors; do not discard the stored token pair or retain/retry a password.
 
 Authenticated requests use:
 
