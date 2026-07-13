@@ -39,7 +39,7 @@ manifest = json.loads((INTEGRATION / "manifest.json").read_text(encoding="utf-8"
 expected = {
     "domain": "fellow_series1",
     "config_flow": True,
-    "documentation": "https://github.com/hazy-dreams/Fellow-Series1-HomeAssistant#readme",
+    "documentation": "https://github.com/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant#readme",
     "iot_class": "cloud_polling",
     "requirements": [],
 }

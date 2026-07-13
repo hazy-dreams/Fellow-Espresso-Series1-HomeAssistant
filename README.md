@@ -2,13 +2,13 @@
 
 # Fellow Espresso Series 1 for Home Assistant
 
-**A focused, read-only Home Assistant integration for the Fellow Espresso Series 1.**
+**Bring the Fellow Espresso Series 1 into Home Assistant.**
 
-[![GitHub Release](https://img.shields.io/github/v/release/hazy-dreams/Fellow-Series1-HomeAssistant)](https://github.com/hazy-dreams/Fellow-Series1-HomeAssistant/releases)
-[![CI](https://img.shields.io/github/actions/workflow/status/hazy-dreams/Fellow-Series1-HomeAssistant/ci.yml?branch=main&label=validation)](https://github.com/hazy-dreams/Fellow-Series1-HomeAssistant/actions/workflows/ci.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant)](https://github.com/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant/releases)
+[![CI](https://img.shields.io/github/actions/workflow/status/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant/ci.yml?branch=main&label=validation)](https://github.com/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant/actions/workflows/ci.yml)
 [![HACS](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://www.hacs.xyz/docs/faq/custom_repositories/)
 [![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2024.11%2B-18BCF2.svg)](https://www.home-assistant.io/)
-[![License](https://img.shields.io/github/license/hazy-dreams/Fellow-Series1-HomeAssistant)](LICENSE)
+[![License](https://img.shields.io/github/license/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant)](LICENSE)
 
 [Installation](#installation) · [Entities](#entities) · [Privacy](#security-and-privacy) · [Limitations](#currently-unsupported)
 
@@ -36,7 +36,7 @@ The integration is intentionally read-only. It checks machine state every five m
 
 ## Entities
 
-Entity IDs depend on the machine name in Home Assistant. The examples below assume the default name `Espresso Series 1`.
+Entity IDs depend on the machine name in Home Assistant. The examples below assume the machine is named `Espresso Series 1`.
 
 | Entity | Type | Description |
 | --- | --- | --- |
@@ -49,6 +49,8 @@ Entity IDs depend on the machine name in Home Assistant. The examples below assu
 | `sensor.espresso_series_1_profile_count` | Sensor | Number of profiles returned by Fellow |
 | `sensor.espresso_series_1_elevation` | Diagnostic | Machine elevation in meters |
 | `sensor.espresso_series_1_settings_version` | Diagnostic | Fellow's device-settings revision |
+
+Target yield is unavailable when the active profile does not include both dose and ratio. Planned duration is unavailable unless phase enablement and every included phase duration are present.
 
 ### Active-profile attributes
 
@@ -76,6 +78,8 @@ ramp_down:
   end_pressure: 5.0
 ```
 
+Recipe values use Fellow's API units: dose and target yield are grams; planned and phase durations are seconds; temperature is degrees Celsius; pressure is bar; and pre-infusion flow rate is milliliters per second. Ratio and grind size are unitless. Nested attributes are plain numbers and do not carry Home Assistant unit metadata.
+
 Profile identifiers, notes, roaster names, image URLs, and other authored text are not exposed as attributes.
 
 ## Installation
@@ -84,7 +88,7 @@ Home Assistant `2024.11.0` or newer is required.
 
 ### HACS
 
-[![Open your Home Assistant instance and add this repository to HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=hazy-dreams&repository=Fellow-Series1-HomeAssistant&category=integration)
+[![Open your Home Assistant instance and add this repository to HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=hazy-dreams&repository=Fellow-Espresso-Series1-HomeAssistant&category=integration)
 
 Or add it manually:
 
@@ -92,7 +96,7 @@ Or add it manually:
 2. Open the three-dot menu and choose **Custom repositories**.
 3. Add:
    ```text
-   https://github.com/hazy-dreams/Fellow-Series1-HomeAssistant
+   https://github.com/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant
    ```
 4. Select **Integration** as the category.
 5. Install **Fellow Espresso Series 1**.
@@ -118,11 +122,11 @@ The machine must already be associated with the Fellow account in the official a
 ## Security and privacy
 
 - The account password is used only for login and is never stored.
-- Home Assistant stores the account email, selected device identifier, access token, and refresh token in its protected config-entry storage.
+- Home Assistant stores the account email, selected device identifier, access token, and refresh token in Home Assistant-managed config-entry storage.
 - Fellow's refresh endpoint requires both tokens; rotated token pairs replace the stored credentials atomically.
 - API responses and private profile data are never written to logs.
 - Diagnostics redact email, tokens, device/profile identifiers, names, profile titles, notes, URLs, hashes, timestamps, and other authored text.
-- All included tests and fixtures use conspicuously fake identifiers and `.invalid` addresses.
+- All included tests and fixtures use conspicuously fake identifiers and reserved test addresses such as `.invalid` and `.example`.
 
 This is a **cloud-polling** integration. Home Assistant needs internet access, Fellow's service must be available, and the machine must remain linked to the Fellow account.
 
@@ -154,12 +158,11 @@ Confirm that:
 
 - the machine appears in the official Fellow app;
 - the account credentials are correct;
-- the device is online; and
 - the device is an Espresso Series 1 (`deviceType: Solo`).
 
 ### Entities are unavailable
 
-Check Fellow cloud availability and the machine's Wi-Fi connection. The integration retries transient cloud failures through Home Assistant's coordinator framework.
+Check Fellow cloud availability and the machine's Wi-Fi connection. Home Assistant marks the entities unavailable when a coordinator update cannot complete.
 
 ## Development
 
