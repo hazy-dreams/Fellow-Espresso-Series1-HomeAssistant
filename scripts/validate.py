@@ -14,6 +14,7 @@ required_files = (
     ROOT / "README.md",
     ROOT / "LICENSE",
     ROOT / "hacs.json",
+    ROOT / "scripts" / "check_ha_imports.py",
     INTEGRATION / "manifest.json",
     INTEGRATION / "strings.json",
     INTEGRATION / "translations" / "en.json",
