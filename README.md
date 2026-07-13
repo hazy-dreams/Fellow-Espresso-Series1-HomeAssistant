@@ -2,7 +2,7 @@
 
 # Fellow Espresso Series 1 for Home Assistant
 
-**A focused, read-only Home Assistant integration for the Fellow Espresso Series 1.**
+**Bring the Fellow Espresso Series 1 into Home Assistant.**
 
 [![GitHub Release](https://img.shields.io/github/v/release/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant)](https://github.com/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant/releases)
 [![CI](https://img.shields.io/github/actions/workflow/status/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant/ci.yml?branch=main&label=validation)](https://github.com/hazy-dreams/Fellow-Espresso-Series1-HomeAssistant/actions/workflows/ci.yml)
